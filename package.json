@@ -1,0 +1,19 @@
+{
+  "name": "gestion-usuarios",
+  "version": "2.0.0",
+  "description": "Práctica NodeJS con Express: gestión de usuarios, grupos y chat de grupo (SQLite)",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "multer": "^1.4.5-lts.1"
+  },
+  "optionalDependencies": {
+    "better-sqlite3": "^12.3.0"
+  }
+}

@@ -1,0 +1,33 @@
+<%- include('../partials/header') %>
+<div class="card">
+  <h1>Alta de usuario</h1>
+  <% if (error) { %><div class="flash error"><%= error %></div><% } %>
+  <form action="/users" method="post" enctype="multipart/form-data">
+    <label>Usuario
+      <input type="text" name="username" value="<%= form.username || '' %>" required>
+    </label>
+    <label>Nombre completo
+      <input type="text" name="name" value="<%= form.name || '' %>" required>
+    </label>
+    <label>Email
+      <input type="email" name="email" value="<%= form.email || '' %>" required>
+    </label>
+    <label>Contraseña (mínimo 6 caracteres)
+      <input type="password" name="password" minlength="6" required>
+    </label>
+    <label>Grupo (opcional, un usuario solo puede estar en un grupo)
+      <select name="groupId">
+        <option value="">— Sin grupo —</option>
+        <% groups.forEach(function (g) { %>
+          <option value="<%= g.id %>" <%= String(form.groupId) === String(g.id) ? 'selected' : '' %>><%= g.name %></option>
+        <% }); %>
+      </select>
+    </label>
+    <label>Foto (png, jpg, gif o webp, máx. 2 MB)
+      <input type="file" name="photo" accept="image/*">
+    </label>
+    <button type="submit">Crear usuario</button>
+    <a href="/users">Cancelar</a>
+  </form>
+</div>
+<%- include('../partials/footer') %>

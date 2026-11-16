@@ -1,0 +1,41 @@
+<%- include('../partials/header') %>
+<h1>Usuarios</h1>
+<% if (currentUser.role === 'admin') { %>
+  <p><a class="btn" href="/users/new">+ Alta de usuario</a></p>
+<% } else if (!currentUser.group_id) { %>
+  <p class="hint">Todavía no perteneces a ningún grupo. El administrador debe asignarte uno.</p>
+<% } %>
+<table>
+  <thead>
+    <tr>
+      <th>Foto</th><th>Usuario</th><th>Nombre</th><th>Email</th><th>Grupo</th><th>Rol</th><th></th>
+    </tr>
+  </thead>
+  <tbody>
+  <% users.forEach(function (u) { %>
+    <tr>
+      <td>
+        <% if (u.photo) { %>
+          <img class="avatar" src="/uploads/<%= u.photo %>" alt="Foto de <%= u.name %>">
+        <% } else { %>
+          <span class="avatar placeholder"><%= u.name.charAt(0).toUpperCase() %></span>
+        <% } %>
+      </td>
+      <td><%= u.username %></td>
+      <td><%= u.name %></td>
+      <td><%= u.email %></td>
+      <td><%= u.groupName %></td>
+      <td><%= u.role === 'admin' ? 'Administrador' : 'Usuario' %></td>
+      <td class="actions">
+        <% if (currentUser.role === 'admin' && u.role !== 'admin') { %>
+          <form action="/users/<%= u.id %>/delete" method="post" class="inline"
+                onsubmit="return confirm('¿Dar de baja a este usuario?');">
+            <button type="submit" class="danger">Dar de baja</button>
+          </form>
+        <% } %>
+      </td>
+    </tr>
+  <% }); %>
+  </tbody>
+</table>
+<%- include('../partials/footer') %>

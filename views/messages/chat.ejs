@@ -1,0 +1,36 @@
+<%- include('../partials/header') %>
+<div class="chat">
+  <div class="chat-head">
+    <h1><%= group.name %></h1>
+    <span class="hint"><%= members.length %> miembros: <%= members.map(function (m) { return m.name; }).join(', ') %></span>
+  </div>
+
+  <div id="chat-log" class="chat-log" data-last-id="<%= lastId %>">
+    <% if (messages.length === 0) { %>
+      <p id="chat-empty" class="hint center">Todavía no hay mensajes. ¡Escribe el primero!</p>
+    <% } %>
+    <% messages.forEach(function (m) { %>
+      <div class="msg <%= m.mine ? 'mine' : 'other' %>" data-id="<%= m.id %>">
+        <% if (m.photo) { %>
+          <img class="avatar sm" src="/uploads/<%= m.photo %>" alt="">
+        <% } else { %>
+          <span class="avatar sm placeholder"><%= m.name.charAt(0).toUpperCase() %></span>
+        <% } %>
+        <div class="bubble">
+          <% if (!m.mine) { %><div class="author"><%= m.name %></div><% } %>
+          <div class="text"><%= m.body %></div>
+          <time class="when" data-iso="<%= m.createdAt %>"></time>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+
+  <form id="chat-form" action="/messages" method="post" class="chat-form">
+    <textarea id="chat-input" name="body" rows="1" maxlength="<%= maxLen %>"
+              placeholder="Escribe un mensaje (Enter envía, Shift+Enter nueva línea)" required></textarea>
+    <button type="submit">Enviar</button>
+  </form>
+  <div id="chat-error" class="flash error" hidden></div>
+</div>
+<script src="/js/chat.js"></script>
+<%- include('../partials/footer') %>

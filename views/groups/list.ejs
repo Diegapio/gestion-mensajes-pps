@@ -1,0 +1,63 @@
+<%- include('../partials/header') %>
+<h1>Grupos</h1>
+
+<div class="card">
+  <h2>Nuevo grupo</h2>
+  <form action="/groups" method="post" class="row">
+    <input type="text" name="name" placeholder="Nombre del grupo" required>
+    <button type="submit">Crear grupo</button>
+  </form>
+</div>
+
+<% if (groups.length === 0) { %>
+  <p class="hint">Todavía no hay grupos.</p>
+<% } %>
+
+<% groups.forEach(function (g) { %>
+  <div class="card">
+    <div class="row between">
+      <h2><%= g.name %> <small>(<%= g.members.length %> miembros)</small></h2>
+      <form action="/groups/<%= g.id %>/delete" method="post" class="inline"
+            onsubmit="return confirm('¿Dar de baja este grupo?');">
+        <button type="submit" class="danger">Dar de baja</button>
+      </form>
+    </div>
+    <% if (g.members.length) { %>
+      <ul>
+        <% g.members.forEach(function (m) { %>
+          <li>
+            <%= m.name %> (<%= m.username %>)
+            <form action="/groups/assign" method="post" class="inline">
+              <input type="hidden" name="userId" value="<%= m.id %>">
+              <input type="hidden" name="groupId" value="">
+              <button type="submit" class="link">Quitar del grupo</button>
+            </form>
+          </li>
+        <% }); %>
+      </ul>
+    <% } else { %>
+      <p class="hint">Sin miembros.</p>
+    <% } %>
+  </div>
+<% }); %>
+
+<% if (groups.length && users.length) { %>
+  <div class="card">
+    <h2>Asignar usuario a un grupo</h2>
+    <p class="hint">Un usuario solo puede pertenecer a un grupo; al asignarlo se mueve del anterior.</p>
+    <form action="/groups/assign" method="post" class="row">
+      <select name="userId" required>
+        <% users.forEach(function (u) { %>
+          <option value="<%= u.id %>"><%= u.name %> (<%= u.username %>) — <%= u.groupName || 'sin grupo' %></option>
+        <% }); %>
+      </select>
+      <select name="groupId" required>
+        <% groups.forEach(function (g) { %>
+          <option value="<%= g.id %>"><%= g.name %></option>
+        <% }); %>
+      </select>
+      <button type="submit">Asignar</button>
+    </form>
+  </div>
+<% } %>
+<%- include('../partials/footer') %>
